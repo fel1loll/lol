@@ -4,6 +4,20 @@ LABEL       author="QuintenQVD" maintainer="josdekurk@gmail.com"
 
 ENV     DEBIAN_FRONTEND noninteractive
 
+
+##i dont know what the hell im doing
+RUN         dpkg --add-architecture i386 \
+            && apt update \
+            && apt upgrade -y \
+            && apt install -y tar curl gcc g++ lib32gcc-s1 libgcc1 libcurl4-gnutls-dev:i386 libssl1.1:i386 libcurl4:i386 lib32tinfo6 libtinfo6:i386 lib32z1 lib32stdc++6 libncurses5:i386 libcurl3-gnutls:i386 libsdl2-2.0-0:i386 iproute2 gdb libsdl1.2debian libfontconfig1 telnet net-tools netcat tzdata numactl \
+            && useradd -m -d /home/container container
+
+## install rcon
+RUN         cd /tmp/ \
+            && curl -sSL https://github.com/gorcon/rcon-cli/releases/download/v0.10.2/rcon-0.10.2-amd64_linux.tar.gz > rcon.tar.gz \
+            && tar xvf rcon.tar.gz \
+            && mv rcon-0.10.2-amd64_linux/rcon /usr/local/bin/
+	    
 ## Update base packages
 RUN          apt update \
              && apt upgrade -y
@@ -22,21 +36,8 @@ RUN          update-locale lang=en_US.UTF-8 \
 RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
             && wget -O- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | tee /usr/share/keyrings/box64-debs-archive-keyring.gpg \
             && apt update && apt install box64 -y
-
-##i dont know what the hell im doing
-RUN         dpkg --add-architecture i386 \
-            && apt update \
-            && apt upgrade -y \
-            && apt install -y tar curl gcc g++ lib32gcc-s1 libgcc1 libcurl4-gnutls-dev:i386 libssl1.1:i386 libcurl4:i386 lib32tinfo6 libtinfo6:i386 lib32z1 lib32stdc++6 libncurses5:i386 libcurl3-gnutls:i386 libsdl2-2.0-0:i386 iproute2 gdb libsdl1.2debian libfontconfig1 telnet net-tools netcat tzdata numactl \
-            && useradd -m -d /home/container container
-
-## install rcon
-RUN         cd /tmp/ \
-            && curl -sSL https://github.com/gorcon/rcon-cli/releases/download/v0.10.2/rcon-0.10.2-amd64_linux.tar.gz > rcon.tar.gz \
-            && tar xvf rcon.tar.gz \
-            && mv rcon-0.10.2-amd64_linux/rcon /usr/local/bin/
-
-RUN		useradd -d /home/container -m container
+	    
+RUN	useradd -d /home/container -m container
 USER    container
 ENV     USER=container HOME=/home/container
 WORKDIR /home/container
