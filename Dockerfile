@@ -25,5 +25,5 @@ USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
 
-CMD ["/box86/build/box86", "entrypoint.sh"]
+CMD ["entrypoint.sh", "entrypoint.sh"]
 
