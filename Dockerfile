@@ -24,8 +24,6 @@ RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt
             && apt update && apt install box64 -y
 
 ##i dont know what the hell im doing
-ENV         DEBIAN_FRONTEND=noninteractive
-
 RUN         dpkg --add-architecture i386 \
             && apt update \
             && apt upgrade -y \
